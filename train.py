@@ -27,7 +27,6 @@ def train_mri_type(df_train, df_valid, mri_type):
         df_valid.loc[:, "MRI_Type"] = mri_type
 
     print(df_train.shape, df_valid.shape)
-    print(df_train.head())
 
     train_data_retriever = MRIDataset(
         df_train["BraTS21ID"].values,

@@ -1,3 +1,4 @@
+*.pth
 data/train_sample
 data/test_sample
 # Byte-compiled / optimized / DLL files
