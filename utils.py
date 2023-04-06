@@ -34,7 +34,7 @@ def load_dicom_images_3d(scan_id, num_imgs=64, img_size=256, mri_type="FLAIR", s
     num_imgs2 = num_imgs // 2
     p1 = max(0, middle - num_imgs2)
     p2 = min(len(files), middle + num_imgs2)
-    img3d = np.stack([load_dicom_image(f, rotate=rotate) for f in files[p1:p2]]).T
+    img3d = np.stack([load_dicom_image(f, img_size=img_size, rotate=rotate) for f in files[p1:p2]]).T
     if img3d.shape[-1] < num_imgs:
         n_zero = np.zeros((img_size, img_size, num_imgs - img3d.shape[-1]))
         img3d = np.concatenate((img3d, n_zero), axis=-1)
