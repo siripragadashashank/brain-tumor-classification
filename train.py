@@ -5,7 +5,7 @@ from datasets import MRIDataset
 from torch.utils.data import DataLoader
 import torch.nn.functional as F
 
-from model import Model, Trainer
+from models import SimpleCNNModel, EfficientModel, Trainer
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
