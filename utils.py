@@ -26,7 +26,7 @@ def load_dicom_image(path, img_size=256, voi_lut=True, rotate=0):
     return data
 
 
-def load_dicom_images_3d(scan_id, num_imgs=64, img_size=256, mri_type="FLAIR", split="train", rotate=0):
+def load_dicom_images_3d(scan_id, num_imgs=64, img_size=128, mri_type="FLAIR", split="train", rotate=0):
     files = sorted(glob.glob(f"{data_directory}/{split}/{scan_id}/{mri_type}/*.dcm"),
                    key=lambda var: [int(x) if x.isdigit() else x for x in re.findall(r'[^0-9]|[0-9]+', var)])
 

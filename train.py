@@ -10,7 +10,7 @@ from models import SimpleCNNModel, EfficientModel, Trainer
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-def train_mri_type(df_train, df_valid, mri_type):
+def train_mri_type(df_train, df_valid, num_imgs, img_size, model, mri_type, num_epochs=10):
     if mri_type == "all":
         train_list = []
         valid_list = []
@@ -32,36 +32,42 @@ def train_mri_type(df_train, df_valid, mri_type):
         df_train["BraTS21ID"].values,
         df_train["MGMT_value"].values,
         df_train["MRI_Type"].values,
+        num_imgs=num_imgs,
+        img_size=img_size,
         augment=True
     )
 
     valid_data_retriever = MRIDataset(
         df_valid["BraTS21ID"].values,
         df_valid["MGMT_value"].values,
-        df_valid["MRI_Type"].values
+        df_valid["MRI_Type"].values,
+        num_imgs=num_imgs,
+        img_size=img_size
+
     )
 
     train_loader = DataLoader(
         train_data_retriever,
         batch_size=4,
         shuffle=True,
-        num_workers=8, pin_memory=True
+        num_workers=8,
+        pin_memory=True
     )
 
     valid_loader = DataLoader(
         valid_data_retriever,
         batch_size=4,
         shuffle=False,
-        num_workers=8, pin_memory=True
+        num_workers=8,
+        pin_memory=True
     )
 
-    model = Model()
     model.to(device)
 
     # checkpoint = torch.load("best-model-all-auc0.555.pth")
     # model.load_state_dict(checkpoint["model_state_dict"])
 
-    # print(model)
+    print(model)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
     # optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
@@ -76,7 +82,7 @@ def train_mri_type(df_train, df_valid, mri_type):
     )
 
     history = trainer.fit(
-        10,
+        num_epochs,
         train_loader,
         valid_loader,
         f"{mri_type}",
@@ -86,7 +92,7 @@ def train_mri_type(df_train, df_valid, mri_type):
     return trainer.lastmodel
 
 
-def predict(modelfile, df, mri_type, split):
+def predict(modelfile, df, mri_type, split, model):
     print("Predict:", modelfile, mri_type, df.shape)
     df.loc[:, "MRI_Type"] = mri_type
 
@@ -103,7 +109,6 @@ def predict(modelfile, df, mri_type, split):
         num_workers=8,
     )
 
-    model = Model()
     model.to(device)
 
     checkpoint = torch.load(modelfile)
