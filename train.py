@@ -5,7 +5,7 @@ from datasets import MRIDataset
 from torch.utils.data import DataLoader
 import torch.nn.functional as F
 
-from models import SimpleCNNModel, EfficientModel, Trainer
+from models import Trainer
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -66,8 +66,6 @@ def train_mri_type(df_train, df_valid, num_imgs, img_size, model, mri_type, num_
 
     # checkpoint = torch.load("best-model-all-auc0.555.pth")
     # model.load_state_dict(checkpoint["model_state_dict"])
-
-    print(model)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
     # optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)

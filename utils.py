@@ -10,7 +10,7 @@ mri_types = ['FLAIR', 'T1w', 'T1wCE', 'T2w']
 data_directory = 'D:/brain-classification-data'
 
 
-def load_dicom_image(path, img_size=256, voi_lut=True, rotate=0):
+def load_dicom_image(path, img_size=128, voi_lut=True, rotate=0):
     dicom = pydicom.read_file(path)
 
     if voi_lut:
